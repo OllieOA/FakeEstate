@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://globals/card_properties.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+card_cost = 1
+effect_aggressive = 0.0
+effect_nervous = 0.0
+effect_fatigue = 1.0

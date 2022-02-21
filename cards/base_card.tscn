@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://cards/base_card.gd" type="Script" id=1]
+[ext_resource path="res://cards/base_card_properties.tres" type="Resource" id=2]
+[ext_resource path="res://assets/card_border.png" type="Texture" id=3]
+[ext_resource path="res://assets/themes/base_theme.tres" type="Theme" id=4]
+[ext_resource path="res://assets/card_border_background.png" type="Texture" id=5]
+
+[node name="BaseCard" type="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -1100.0
+margin_bottom = -516.0
+rect_pivot_offset = Vector2( 90, 126 )
+theme = ExtResource( 4 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+card_properties = ExtResource( 2 )
+card_type = 1
+
+[node name="CardBackground" type="NinePatchRect" parent="."]
+margin_right = 180.0
+margin_bottom = 252.0
+texture = ExtResource( 5 )
+patch_margin_left = 24
+patch_margin_top = 24
+patch_margin_right = 24
+patch_margin_bottom = 24
+
+[node name="CardBorder" type="NinePatchRect" parent="."]
+margin_right = 180.0
+margin_bottom = 252.0
+texture = ExtResource( 3 )
+patch_margin_left = 24
+patch_margin_top = 24
+patch_margin_right = 24
+patch_margin_bottom = 24
+
+[node name="CardInfo" type="VBoxContainer" parent="."]
+margin_right = 180.0
+margin_bottom = 252.0
+
+[node name="TopGap" type="MarginContainer" parent="CardInfo"]
+margin_right = 180.0
+margin_bottom = 25.0
+rect_min_size = Vector2( 0, 25 )
+
+[node name="CardTitle" type="Label" parent="CardInfo"]
+margin_top = 29.0
+margin_right = 180.0
+margin_bottom = 43.0
+text = "Card Title"
+align = 1
+autowrap = true
