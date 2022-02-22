@@ -8,3 +8,7 @@ A corkboard in a rental office will have images of houses on it. They will be li
 ### Parties
 Parties will have traits
 SEE "*type_planning.xlsx*"
+### Cards
+ - [ ] Coax (+Aggro, -Nerves)
+ - [ ] Speculate
+ - [ ] Excite

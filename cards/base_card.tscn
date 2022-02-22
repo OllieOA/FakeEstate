@@ -1,10 +1,16 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://cards/base_card.gd" type="Script" id=1]
 [ext_resource path="res://cards/base_card_properties.tres" type="Resource" id=2]
 [ext_resource path="res://assets/card_border.png" type="Texture" id=3]
 [ext_resource path="res://assets/themes/base_theme.tres" type="Theme" id=4]
 [ext_resource path="res://assets/card_border_background.png" type="Texture" id=5]
+[ext_resource path="res://assets/card_icon_frame.png" type="Texture" id=6]
+[ext_resource path="res://assets/card_icon_attribute-export.png" type="Texture" id=7]
+[ext_resource path="res://fonts/font_card_level.tres" type="DynamicFont" id=8]
+[ext_resource path="res://fonts/font_card_description.tres" type="DynamicFont" id=9]
+[ext_resource path="res://assets/card_details_separator.png" type="Texture" id=10]
+[ext_resource path="res://assets/icon_nerve.png" type="Texture" id=12]
 
 [node name="BaseCard" type="MarginContainer"]
 anchor_right = 1.0
@@ -12,6 +18,7 @@ anchor_bottom = 1.0
 margin_right = -1100.0
 margin_bottom = -516.0
 rect_pivot_offset = Vector2( 90, 126 )
+hint_tooltip = "This is a tooltip"
 theme = ExtResource( 4 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -19,6 +26,7 @@ __meta__ = {
 }
 card_properties = ExtResource( 2 )
 card_type = 1
+border_texture = NodePath("CardBorder")
 
 [node name="CardBackground" type="NinePatchRect" parent="."]
 margin_right = 180.0
@@ -30,6 +38,7 @@ patch_margin_right = 24
 patch_margin_bottom = 24
 
 [node name="CardBorder" type="NinePatchRect" parent="."]
+modulate = Color( 0.447059, 0.945098, 0.345098, 1 )
 margin_right = 180.0
 margin_bottom = 252.0
 texture = ExtResource( 3 )
@@ -37,20 +46,146 @@ patch_margin_left = 24
 patch_margin_top = 24
 patch_margin_right = 24
 patch_margin_bottom = 24
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="CardInfo" type="VBoxContainer" parent="."]
+[node name="CardContents" type="MarginContainer" parent="."]
 margin_right = 180.0
 margin_bottom = 252.0
+mouse_filter = 2
+custom_constants/margin_right = 18
+custom_constants/margin_top = 24
+custom_constants/margin_left = 18
+custom_constants/margin_bottom = 18
 
-[node name="TopGap" type="MarginContainer" parent="CardInfo"]
-margin_right = 180.0
-margin_bottom = 25.0
-rect_min_size = Vector2( 0, 25 )
+[node name="CardInfo" type="VBoxContainer" parent="CardContents"]
+margin_left = 18.0
+margin_top = 24.0
+margin_right = 162.0
+margin_bottom = 234.0
+grow_vertical = 0
+mouse_filter = 2
+custom_constants/separation = 8
 
-[node name="CardTitle" type="Label" parent="CardInfo"]
-margin_top = 29.0
-margin_right = 180.0
-margin_bottom = 43.0
-text = "Card Title"
+[node name="CardTitle" type="Label" parent="CardContents/CardInfo"]
+margin_right = 144.0
+margin_bottom = 14.0
+text = "SPECULATE"
 align = 1
 autowrap = true
+
+[node name="Icons" type="HBoxContainer" parent="CardContents/CardInfo"]
+margin_left = 8.0
+margin_top = 22.0
+margin_right = 136.0
+margin_bottom = 78.0
+mouse_filter = 2
+size_flags_horizontal = 4
+custom_constants/separation = 16
+
+[node name="LevelBorder" type="NinePatchRect" parent="CardContents/CardInfo/Icons"]
+self_modulate = Color( 0.356863, 0.780392, 0.984314, 1 )
+margin_right = 56.0
+margin_bottom = 56.0
+grow_horizontal = 2
+rect_min_size = Vector2( 56, 56 )
+texture = ExtResource( 6 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="LevelText" type="Label" parent="CardContents/CardInfo/Icons/LevelBorder"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0.835294, 0.635294, 0.164706, 1 )
+custom_fonts/font = ExtResource( 8 )
+text = "1"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ClassBorder" type="NinePatchRect" parent="CardContents/CardInfo/Icons"]
+self_modulate = Color( 0.356863, 0.780392, 0.984314, 1 )
+margin_left = 72.0
+margin_right = 128.0
+margin_bottom = 56.0
+grow_horizontal = 2
+rect_min_size = Vector2( 56, 56 )
+texture = ExtResource( 6 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="ClassIcon" type="TextureRect" parent="CardContents/CardInfo/Icons/ClassBorder"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CardText" type="Label" parent="CardContents/CardInfo"]
+margin_top = 86.0
+margin_right = 144.0
+margin_bottom = 122.0
+custom_fonts/font = ExtResource( 9 )
+text = "\"Real Magazine said this place can't lose money!\""
+align = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EffectLine" type="TextureRect" parent="CardContents/CardInfo"]
+margin_top = 130.0
+margin_right = 144.0
+margin_bottom = 134.0
+mouse_filter = 2
+texture = ExtResource( 10 )
+stretch_mode = 4
+
+[node name="CardEffects" type="VBoxContainer" parent="CardContents/CardInfo"]
+margin_top = 142.0
+margin_right = 144.0
+margin_bottom = 170.0
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Effect1" type="HBoxContainer" parent="CardContents/CardInfo/CardEffects"]
+margin_left = 33.0
+margin_right = 111.0
+margin_bottom = 28.0
+size_flags_horizontal = 4
+
+[node name="Effect1Icon" type="TextureRect" parent="CardContents/CardInfo/CardEffects/Effect1"]
+margin_right = 28.0
+margin_bottom = 28.0
+texture = ExtResource( 12 )
+
+[node name="Effect1Text" type="Label" parent="CardContents/CardInfo/CardEffects/Effect1"]
+margin_left = 32.0
+margin_top = 7.0
+margin_right = 78.0
+margin_bottom = 21.0
+text = "-10"
+
+[node name="Effect2" type="HBoxContainer" parent="CardContents/CardInfo/CardEffects"]
+visible = false
+margin_left = 70.0
+margin_top = 32.0
+margin_right = 74.0
+margin_bottom = 46.0
+size_flags_horizontal = 4
+
+[node name="Effect2Icon" type="TextureRect" parent="CardContents/CardInfo/CardEffects/Effect2"]
+margin_bottom = 14.0
+
+[node name="Effect2Text" type="Label" parent="CardContents/CardInfo/CardEffects/Effect2"]
+margin_left = 4.0
+margin_right = 4.0
+margin_bottom = 14.0

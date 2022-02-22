@@ -1,7 +1,7 @@
 extends Resource
 class_name CardProperties
 
-
+enum Class {ATTRIBUTE, FORCE, BUFF, WASTE}
 enum Type {COAX, SPECULATE, EXCITE}
 
 export var card_cost := 1
@@ -39,8 +39,13 @@ var card_database = {
 		"effect_aggressive": 0.0,
 		"effect_nervous": 0.0,
 		"effect_fatigue": 0.0,
-		"tooltip": "InvestoMarketSynergy Magazine said this place can't lose money!"
+		"tooltip": "Real Magazine said this place can't lose money!"
 #		"icon": preload(""),
 #		"base_color": Color()
 	},
+}
+
+
+var card_effects = {
+	
 }
