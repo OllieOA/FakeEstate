@@ -7,6 +7,7 @@ enum State {
 	PLAYING,
 	PLAYED,
 	DISCARDING,
+	SELECTING,
 	DIRECTING, 
 	FOCUSING,
 	FOCUSED,
@@ -61,6 +62,8 @@ var hand_position := Vector2.ZERO
 var hand_rotation := 0
 var hand_scale := Vector2(1.0, 1.0)
 
+var mouseover_enabled := true
+
 # Card control
 var drawn := false
 
@@ -100,18 +103,18 @@ func _construct_card() -> void:
 	
 	if card_attributes["effect_2_icon"] != null:
 		effect_2_icon.texture = card_attributes["effect_2_icon"]
+		
+	focus_button.disabled = true  # Prevent gold bordering
 
 
 func _resize_label(label: Label, min_size=8) -> int:
 	var pass_label = _check_text_violations(label)
 	
 	label.visible = false
-#	var font_data = label.get_font("font")
 	var font_data = DynamicFont.new()
 	font_data.font_data = load("res://fonts/dogicapixel.ttf")
 	
 	while not pass_label:
-#		print("REDUCING: ", label)
 		base_font_size -= 1
 		font_data.size = base_font_size
 		label.add_font_override("font", font_data)
@@ -147,8 +150,8 @@ func _process(delta: float) -> void:
 	scale_diff_x = abs(rect_scale.x - target_scale.x)
 	scale_diff_y = abs(rect_scale.y - target_scale.y)
 	
-	position_close_enough = position_diff_x < 10 and position_diff_y < 10
-	rotation_close_enough = abs(rect_rotation - target_rotation) < 10
+	position_close_enough = position_diff_x < 5 and position_diff_y < 5
+	rotation_close_enough = abs(rect_rotation - target_rotation) < 5
 	scale_close_enough = scale_diff_x < 0.1 and scale_diff_y < 0.1
 	
 	match state:
@@ -158,13 +161,19 @@ func _process(delta: float) -> void:
 			pass
 		State.SENDING_TO_HAND: # Animate from deck location
 			if position_close_enough and rotation_close_enough and scale_close_enough:
-				focus_button.disabled = false
+				focus_button.disabled = true
 				SignalBus.emit_signal("card_returned", self)
 				state = State.HAND
 		State.DISCARDING:
 			pass
-		State.DIRECTING:
-			pass
+		State.SELECTING:
+			SignalBus.emit_signal("card_selected_for_play", self)
+			state = State.DIRECTING
+		State.DIRECTING:  # Selected for play
+			if Input.is_action_pressed(GameControl.secondary_action):
+				focus_button.pressed = false
+				_unfocus()
+				SignalBus.emit_signal("card_unselected_for_play", self)
 		State.FOCUSING:
 			if Input.is_action_pressed(GameControl.secondary_action):
 				_unfocus()
@@ -174,6 +183,8 @@ func _process(delta: float) -> void:
 		State.FOCUSED:
 			if Input.is_action_pressed(GameControl.secondary_action):
 				_unfocus()
+			if focus_button.disabled:
+				focus_button.disabled = false
 		State.DISABLED:
 			pass
 
@@ -183,14 +194,21 @@ func _process(delta: float) -> void:
 
 func _on_Focus_pressed() -> void:
 	match state:
-		State.HAND, State.SENDING_TO_HAND:
-			_focus()
+		State.FOCUSED, State.FOCUSING:
+			state = State.SELECTING
 
 
 func _on_Focus_mouse_entered() -> void:
 	match state:
 		State.HAND:
-			_focus()
+			if mouseover_enabled:
+				_focus()
+
+
+func _on_Focus_mouse_exited() -> void:
+	match state:
+		State.FOCUSED:
+			_unfocus()
 
 
 func _check_focus(card):
@@ -212,3 +230,4 @@ func _unfocus():
 	target_scale = hand_scale
 	focus_button.disabled = true
 	state = State.SENDING_TO_HAND
+

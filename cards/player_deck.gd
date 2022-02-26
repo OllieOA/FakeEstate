@@ -24,7 +24,6 @@ func initialize() -> void:
 
 func draw_up_to(num_cards: int) -> void:
 	for _i in range(num_cards):
-		print("DRAWING ", _i)
 		var new_card = draw()
 		if new_card != null: 
 			current_hand.append(new_card)
@@ -39,7 +38,6 @@ func draw():
 	var card_choice = current_deck.pop_at(index_choice)
 	base_card_instance.card_type = card_choice
 	
-	print("DEBUG: EMITTING CARD DRAWN")
 	SignalBus.emit_signal("card_drawn", base_card_instance)
 	
 	# Check if deck exhaused

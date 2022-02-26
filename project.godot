@@ -14,6 +14,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://cards/base_card.gd"
 }, {
+"base": "MarginContainer",
+"class": "BaseEnemy",
+"language": "GDScript",
+"path": "res://enemies/base_enemy.gd"
+}, {
+"base": "MarginContainer",
+"class": "BiddingPanel",
+"language": "GDScript",
+"path": "res://scenes/bidding_area.gd"
+}, {
 "base": "Resource",
 "class": "CardProperties",
 "language": "GDScript",
@@ -31,6 +41,8 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "BaseCard": "",
+"BaseEnemy": "",
+"BiddingPanel": "",
 "CardProperties": "",
 "EnemyProperties": "",
 "PlayerDeck": ""

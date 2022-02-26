@@ -1,0 +1,189 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://assets/enemy/enemy_card_border_background.png" type="Texture" id=1]
+[ext_resource path="res://assets/enemy/enemy_card_border.png" type="Texture" id=2]
+[ext_resource path="res://enemies/base_enemy.gd" type="Script" id=3]
+[ext_resource path="res://assets/ui/icon_fatigue.png" type="Texture" id=4]
+[ext_resource path="res://assets/ui/icon_nerve.png" type="Texture" id=5]
+[ext_resource path="res://assets/ui/icon_aggro.png" type="Texture" id=6]
+[ext_resource path="res://assets/themes/base_theme.tres" type="Theme" id=7]
+[ext_resource path="res://assets/card/card_details_separator_vertical.png" type="Texture" id=8]
+[ext_resource path="res://fonts/card_font_12.tres" type="DynamicFontData" id=9]
+[ext_resource path="res://assets/ui/icon_fold.png" type="Texture" id=10]
+
+[sub_resource type="DynamicFont" id=1]
+size = 12
+font_data = ExtResource( 9 )
+
+[node name="BaseEnemy" type="MarginContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 360, 216 )
+theme = ExtResource( 7 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EnemyBackground" type="NinePatchRect" parent="."]
+margin_right = 360.0
+margin_bottom = 244.0
+texture = ExtResource( 1 )
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="EnemyBorder" type="NinePatchRect" parent="."]
+margin_right = 360.0
+margin_bottom = 244.0
+texture = ExtResource( 2 )
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="EnemyContents" type="MarginContainer" parent="."]
+margin_right = 360.0
+margin_bottom = 244.0
+custom_constants/margin_right = 18
+custom_constants/margin_top = 20
+custom_constants/margin_left = 18
+custom_constants/margin_bottom = 18
+
+[node name="EnemyInfo" type="VBoxContainer" parent="EnemyContents"]
+margin_left = 18.0
+margin_top = 20.0
+margin_right = 342.0
+margin_bottom = 226.0
+custom_constants/separation = 14
+
+[node name="EnemyName" type="Label" parent="EnemyContents/EnemyInfo"]
+margin_right = 324.0
+margin_bottom = 14.0
+text = "Firstname Lastname"
+align = 1
+
+[node name="EnemyType" type="Label" parent="EnemyContents/EnemyInfo"]
+margin_top = 28.0
+margin_right = 324.0
+margin_bottom = 42.0
+custom_constants/line_spacing = 0
+text = "Class Of Enemy"
+align = 1
+
+[node name="HLine" type="TextureRect" parent="EnemyContents/EnemyInfo"]
+margin_top = 56.0
+margin_right = 324.0
+margin_bottom = 60.0
+texture = ExtResource( 8 )
+stretch_mode = 1
+
+[node name="EnemyCardInfo" type="HBoxContainer" parent="EnemyContents/EnemyInfo"]
+margin_top = 74.0
+margin_right = 324.0
+margin_bottom = 206.0
+
+[node name="EnemyAttributes" type="VBoxContainer" parent="EnemyContents/EnemyInfo/EnemyCardInfo"]
+margin_right = 100.0
+margin_bottom = 132.0
+rect_min_size = Vector2( 100, 132 )
+
+[node name="AggroAttributes" type="HBoxContainer" parent="EnemyContents/EnemyInfo/EnemyCardInfo/EnemyAttributes"]
+margin_right = 100.0
+margin_bottom = 28.0
+
+[node name="AggroIcon" type="TextureRect" parent="EnemyContents/EnemyInfo/EnemyCardInfo/EnemyAttributes/AggroAttributes"]
+margin_right = 28.0
+margin_bottom = 28.0
+texture = ExtResource( 6 )
+
+[node name="AggroNumber" type="Label" parent="EnemyContents/EnemyInfo/EnemyCardInfo/EnemyAttributes/AggroAttributes"]
+margin_left = 32.0
+margin_top = 7.0
+margin_right = 100.0
+margin_bottom = 21.0
+text = "100%"
+
+[node name="NerveAttributes" type="HBoxContainer" parent="EnemyContents/EnemyInfo/EnemyCardInfo/EnemyAttributes"]
+margin_top = 32.0
+margin_right = 100.0
+margin_bottom = 60.0
+
+[node name="NerveIcon" type="TextureRect" parent="EnemyContents/EnemyInfo/EnemyCardInfo/EnemyAttributes/NerveAttributes"]
+margin_right = 28.0
+margin_bottom = 28.0
+texture = ExtResource( 5 )
+
+[node name="NerveNumber" type="Label" parent="EnemyContents/EnemyInfo/EnemyCardInfo/EnemyAttributes/NerveAttributes"]
+margin_left = 32.0
+margin_top = 7.0
+margin_right = 100.0
+margin_bottom = 21.0
+text = "100%"
+
+[node name="FatigueAttribute" type="HBoxContainer" parent="EnemyContents/EnemyInfo/EnemyCardInfo/EnemyAttributes"]
+margin_top = 64.0
+margin_right = 100.0
+margin_bottom = 92.0
+
+[node name="FatigueIcon" type="TextureRect" parent="EnemyContents/EnemyInfo/EnemyCardInfo/EnemyAttributes/FatigueAttribute"]
+margin_right = 28.0
+margin_bottom = 28.0
+texture = ExtResource( 4 )
+
+[node name="FatigueNumber" type="Label" parent="EnemyContents/EnemyInfo/EnemyCardInfo/EnemyAttributes/FatigueAttribute"]
+margin_left = 32.0
+margin_top = 7.0
+margin_right = 100.0
+margin_bottom = 21.0
+text = "100%"
+
+[node name="VLine2" type="TextureRect" parent="EnemyContents/EnemyInfo/EnemyCardInfo/EnemyAttributes"]
+margin_top = 96.0
+margin_right = 100.0
+margin_bottom = 100.0
+texture = ExtResource( 8 )
+stretch_mode = 1
+
+[node name="FoldLikelihood" type="HBoxContainer" parent="EnemyContents/EnemyInfo/EnemyCardInfo/EnemyAttributes"]
+margin_top = 104.0
+margin_right = 100.0
+margin_bottom = 132.0
+
+[node name="FoldIcon" type="TextureRect" parent="EnemyContents/EnemyInfo/EnemyCardInfo/EnemyAttributes/FoldLikelihood"]
+margin_right = 28.0
+margin_bottom = 28.0
+texture = ExtResource( 10 )
+
+[node name="FoldNumber" type="Label" parent="EnemyContents/EnemyInfo/EnemyCardInfo/EnemyAttributes/FoldLikelihood"]
+margin_left = 32.0
+margin_top = 7.0
+margin_right = 100.0
+margin_bottom = 21.0
+text = "100%"
+
+[node name="VLine" type="TextureRect" parent="EnemyContents/EnemyInfo/EnemyCardInfo"]
+margin_left = 104.0
+margin_right = 108.0
+margin_bottom = 132.0
+texture = ExtResource( 8 )
+stretch_mode = 1
+
+[node name="NextTurnEffects" type="ScrollContainer" parent="EnemyContents/EnemyInfo/EnemyCardInfo"]
+margin_left = 112.0
+margin_right = 324.0
+margin_bottom = 132.0
+size_flags_horizontal = 3
+scroll_horizontal_enabled = false
+
+[node name="NextTurnEffectsList" type="VBoxContainer" parent="EnemyContents/EnemyInfo/EnemyCardInfo/NextTurnEffects"]
+margin_right = 95.0
+margin_bottom = 10.0
+custom_constants/separation = 12
+
+[node name="NextTurnGroupName" type="Label" parent="EnemyContents/EnemyInfo/EnemyCardInfo/NextTurnEffects/NextTurnEffectsList"]
+margin_right = 95.0
+margin_bottom = 10.0
+custom_fonts/font = SubResource( 1 )
+text = "Next Turn:"

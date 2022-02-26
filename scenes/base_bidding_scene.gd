@@ -8,16 +8,7 @@ export (NodePath) onready var deck_button = get_node(deck_button) as TextureButt
 export (NodePath) onready var discard_button = get_node(discard_button) as TextureButton
 export (PackedScene) var base_card_scene
 
-# Game Win Information
-export (NodePath) onready var bidding_amount = get_node(bidding_amount) as Label
-export (NodePath) onready var commission_amount = get_node(commission_amount) as Label
-export (NodePath) onready var commission_goal = get_node(commission_goal) as Label
-
-export var initial_amount := 100.0
-var current_bid := 0.0
-var current_commission_percentage := 10.0
-var current_commission := 0.0
-
+export (NodePath) onready var bidding_panel = get_node(bidding_panel) as BiddingPanel
 
 # Play area
 onready var card_oval_centre = get_viewport().size * Vector2(0.5, 1.3)
@@ -26,6 +17,8 @@ onready var card_oval_v_radius = get_viewport().size.y * 0.4
 var max_angle = 135
 var min_angle = 45
 var player_hand_instances = []
+var is_card_selected := false
+var card_selected
 
 # Functional
 export (NodePath) onready var start_button = get_node(start_button)
@@ -33,6 +26,7 @@ var rng = RandomNumberGenerator.new()
 
 
 func _ready() -> void:
+	bidding_panel.visible = false
 	rng.randomize()
 	
 	# Connect signals
@@ -40,6 +34,8 @@ func _ready() -> void:
 	SignalBus.connect("level_dialogue_complete", self, "_show_start")
 	SignalBus.connect("card_focusing", self, "_raise_focused_card")
 	SignalBus.connect("card_returned", self, "_handle_returned_card")
+	SignalBus.connect("card_selected_for_play", self, "_handle_card_selected_for_play")
+	SignalBus.connect("card_unselected_for_play", self, "_handle_card_unselected_for_play")
 	
 	_show_start()
 	
@@ -50,6 +46,15 @@ func _show_start() -> void:
 
 func _start_game() -> void:
 	_create_deck()
+	bidding_panel.show_auction_panel()
+	yield(get_tree().create_timer(2.0), "timeout")
+	bidding_panel.set_bid(100000)
+	
+	yield(get_tree().create_timer(2.0), "timeout")
+	bidding_panel.increase_bid(50000)
+	
+	yield(get_tree().create_timer(2.0), "timeout")
+	bidding_panel.increase_commission_percentage(0.2)
 
 
 # ------------
@@ -135,6 +140,22 @@ func _handle_returned_card(card):
 	_update_viewing_order()
 
 
+func _handle_card_selected_for_play(selected_card):
+	for card in cards_layer.get_children():
+		if card != selected_card:
+			card.mouseover_enabled = false
+	is_card_selected = true
+	card_selected = selected_card
+	
+
+func _handle_card_unselected_for_play(unselected_card):
+	for card in cards_layer.get_children():
+		if card != unselected_card:
+			card.mouseover_enabled = true
+	is_card_selected = false
+	card_selected = null
+
+
 # =------------=
 # Button methods
 # =------------=
@@ -154,19 +175,4 @@ func _on_StartGame_pressed() -> void:
 	_start_game()
 
 
-# =--------------=
-# Game Win Methods
-# =--------------=
 
-func _convert_currency(amount: float) -> String:
-	var currency_string = "%.2f" % amount
-	
-	for idx in range(currency_string.find(".") - 3, 0, -3):
-		currency_string = currency_string.insert(idx, ",")
-	currency_string = "$" + currency_string
-	return currency_string
-
-
-func _update_bid_info(amount):
-	current_bid += amount
-	bidding_amount.set_text(_convert_currency(current_bid))

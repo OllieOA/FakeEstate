@@ -16,6 +16,124 @@ enum Type {
 	HAPPY_TO_BE_HERE
 }
 
+var possible_first_names = [
+	"Cristian",
+	"Alexis",
+	"Mya",
+	"Rylee",
+	"Michelle",
+	"Jasmin",
+	"Katelyn",
+	"Jacob",
+	"Jack",
+	"Matthew",
+	"Ariana",
+	"Brittany",
+	"Marissa",
+	"Amelia",
+	"Summer",
+	"Dalton",
+	"Kennedy",
+	"Shane",
+	"Molly",
+	"Mason",
+	"Benjamin",
+	"Bianca",
+	"Alyssa",
+	"Addison",
+	"Jocelyn",
+	"Breanna",
+	"Sabrina",
+	"Karen",
+	"Lucas",
+	"Cassidy",
+	"Autumn",
+	"Sergio",
+	"Lauren",
+	"Angelica",
+	"Julian",
+	"Madeline",
+	"Colin",
+	"Wyatt",
+	"Rachel",
+	"Kiara"
+]
+
+var possible_last_names = [
+	"Shaw",
+	"Tran",
+	"Wright",
+	"Gonzalez",
+	"Robertson",
+	"Spencer",
+	"Foster",
+	"Wilson",
+	"Mcdonald",
+	"Cooper",
+	"Myers",
+	"Thomas",
+	"Cunningham",
+	"Jimenez",
+	"Bradley",
+	"Patterson",
+	"Stone",
+	"Crawford",
+	"Garcia",
+	"Hughes",
+	"Richardson",
+	"Knight",
+	"Gordon",
+	"Castillo",
+	"Fisher",
+	"Turner",
+	"Rivera",
+	"Dixon",
+	"Boyd",
+	"Lee",
+	"Nguyen",
+	"Bennett",
+	"Ramirez",
+	"Collins",
+	"Torres",
+	"Flores",
+	"Hamilton",
+	"Holmes",
+	"Marshall",
+	"Mills"
+]
+
+#var type_data = {
+#	TIMEBOMB: {
+#
+#	}
+#	FIRST_TIMERS: {
+#
+#	}
+#	CUCUMBER: {
+#
+#	}
+#	FALSE_CONFIDENCE: {
+#
+#	}
+#	TRUST_FUND: {
+#
+#	}
+#	BULL: {
+#
+#	}
+#	MILLENIAL: {
+#
+#	}
+#	CAFFEINATED: {
+#
+#	}
+#	SAVVY_SHOPPER: {
+#
+#	}
+#	HAPPY_TO_BE_HERE: {
+#
+#	}
+#}
 
 # Methods that cards can call
 
