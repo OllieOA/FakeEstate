@@ -1,22 +1,24 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://cards/base_card.gd" type="Script" id=1]
 [ext_resource path="res://cards/base_card_properties.tres" type="Resource" id=2]
-[ext_resource path="res://assets/card_border.png" type="Texture" id=3]
+[ext_resource path="res://assets/card/card_border.png" type="Texture" id=3]
 [ext_resource path="res://assets/themes/base_theme.tres" type="Theme" id=4]
-[ext_resource path="res://assets/card_border_background.png" type="Texture" id=5]
-[ext_resource path="res://assets/card_icon_frame.png" type="Texture" id=6]
-[ext_resource path="res://assets/card_icon_attribute-export.png" type="Texture" id=7]
+[ext_resource path="res://assets/card/card_border_background.png" type="Texture" id=5]
+[ext_resource path="res://assets/card/card_icon_frame.png" type="Texture" id=6]
+[ext_resource path="res://assets/card/card_icon_attribute.png" type="Texture" id=7]
 [ext_resource path="res://fonts/font_card_level.tres" type="DynamicFont" id=8]
 [ext_resource path="res://fonts/font_card_description.tres" type="DynamicFont" id=9]
-[ext_resource path="res://assets/card_details_separator.png" type="Texture" id=10]
-[ext_resource path="res://assets/icon_nerve.png" type="Texture" id=12]
+[ext_resource path="res://assets/card/card_details_separator.png" type="Texture" id=10]
+[ext_resource path="res://assets/card/card_border_hover.png" type="Texture" id=11]
+[ext_resource path="res://assets/ui/icon_nerve.png" type="Texture" id=12]
 
 [node name="BaseCard" type="MarginContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -1100.0
 margin_bottom = -516.0
+rect_min_size = Vector2( 180, 252 )
 rect_pivot_offset = Vector2( 90, 126 )
 hint_tooltip = "This is a tooltip"
 theme = ExtResource( 4 )
@@ -26,7 +28,18 @@ __meta__ = {
 }
 card_properties = ExtResource( 2 )
 card_type = 1
-border_texture = NodePath("CardBorder")
+card_border = NodePath("CardBorder")
+card_title = NodePath("CardContents/CardInfo/CardTitle")
+level_text = NodePath("CardContents/CardInfo/Icons/LevelBorder/LevelText")
+level_border = NodePath("CardContents/CardInfo/Icons/LevelBorder")
+class_border = NodePath("CardContents/CardInfo/Icons/ClassBorder")
+class_icon = NodePath("CardContents/CardInfo/Icons/ClassBorder/ClassIcon")
+card_text = NodePath("CardContents/CardInfo/CardText")
+effect_1_icon = NodePath("CardContents/CardInfo/CardEffects/Effect1/Effect1Icon")
+effect_1_text = NodePath("CardContents/CardInfo/CardEffects/Effect1/Effect1Text")
+effect_2_icon = NodePath("CardContents/CardInfo/CardEffects/Effect2/Effect2Icon")
+effect_2_text = NodePath("CardContents/CardInfo/CardEffects/Effect2/Effect2Text")
+focus_button = NodePath("Focus")
 
 [node name="CardBackground" type="NinePatchRect" parent="."]
 margin_right = 180.0
@@ -38,7 +51,6 @@ patch_margin_right = 24
 patch_margin_bottom = 24
 
 [node name="CardBorder" type="NinePatchRect" parent="."]
-modulate = Color( 0.447059, 0.945098, 0.345098, 1 )
 margin_right = 180.0
 margin_bottom = 252.0
 texture = ExtResource( 3 )
@@ -71,9 +83,10 @@ custom_constants/separation = 8
 [node name="CardTitle" type="Label" parent="CardContents/CardInfo"]
 margin_right = 144.0
 margin_bottom = 14.0
-text = "SPECULATE"
+text = "TITLE"
 align = 1
 autowrap = true
+max_lines_visible = 1
 
 [node name="Icons" type="HBoxContainer" parent="CardContents/CardInfo"]
 margin_left = 8.0
@@ -134,9 +147,12 @@ margin_top = 86.0
 margin_right = 144.0
 margin_bottom = 122.0
 custom_fonts/font = ExtResource( 9 )
-text = "\"Real Magazine said this place can't lose money!\""
+text = "Lines
+of
+text"
 align = 1
 autowrap = true
+max_lines_visible = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -152,7 +168,7 @@ stretch_mode = 4
 [node name="CardEffects" type="VBoxContainer" parent="CardContents/CardInfo"]
 margin_top = 142.0
 margin_right = 144.0
-margin_bottom = 170.0
+margin_bottom = 188.0
 grow_vertical = 2
 mouse_filter = 2
 
@@ -173,9 +189,9 @@ margin_top = 7.0
 margin_right = 78.0
 margin_bottom = 21.0
 text = "-10"
+max_lines_visible = 1
 
 [node name="Effect2" type="HBoxContainer" parent="CardContents/CardInfo/CardEffects"]
-visible = false
 margin_left = 70.0
 margin_top = 32.0
 margin_right = 74.0
@@ -189,3 +205,14 @@ margin_bottom = 14.0
 margin_left = 4.0
 margin_right = 4.0
 margin_bottom = 14.0
+max_lines_visible = 1
+
+[node name="Focus" type="TextureButton" parent="."]
+margin_right = 180.0
+margin_bottom = 252.0
+texture_hover = ExtResource( 11 )
+expand = true
+stretch_mode = 3
+
+[connection signal="mouse_entered" from="Focus" to="." method="_on_Focus_mouse_entered"]
+[connection signal="pressed" from="Focus" to="." method="_on_Focus_pressed"]

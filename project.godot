@@ -9,20 +9,44 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "MarginContainer",
+"class": "BaseCard",
+"language": "GDScript",
+"path": "res://cards/base_card.gd"
+}, {
 "base": "Resource",
 "class": "CardProperties",
 "language": "GDScript",
 "path": "res://globals/card_properties.gd"
+}, {
+"base": "Resource",
+"class": "EnemyProperties",
+"language": "GDScript",
+"path": "res://enemies/enemy_properties.gd"
+}, {
+"base": "Resource",
+"class": "PlayerDeck",
+"language": "GDScript",
+"path": "res://cards/player_deck.gd"
 } ]
 _global_script_class_icons={
-"CardProperties": ""
+"BaseCard": "",
+"CardProperties": "",
+"EnemyProperties": "",
+"PlayerDeck": ""
 }
 
 [application]
 
 config/name="Fake Estate"
-run/main_scene="res://cards/base_card.tscn"
+run/main_scene="res://scenes/base_bidding_scene.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+SignalBus="*res://globals/signal_bus.gd"
+PlayerProgress="*res://globals/player_progress.gd"
+GameControl="*res://globals/game_control.gd"
 
 [display]
 
@@ -53,6 +77,19 @@ texture={
 "size_limit": 0,
 "stream": false,
 "svg/scale": 1.0
+}
+
+[input]
+
+left_click={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+right_click={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
+ ]
 }
 
 [physics]

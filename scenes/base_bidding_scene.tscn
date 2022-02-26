@@ -1,20 +1,186 @@
-[gd_scene format=2]
+[gd_scene load_steps=13 format=2]
 
-[node name="BaseBiddingScene" type="Control"]
+[ext_resource path="res://assets/mockup.png" type="Texture" id=1]
+[ext_resource path="res://scenes/base_bidding_scene.gd" type="Script" id=2]
+[ext_resource path="res://cards/base_card.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/card/card_back_base.png" type="Texture" id=4]
+[ext_resource path="res://assets/card/card_deck.png" type="Texture" id=5]
+[ext_resource path="res://assets/card/card_back_hover.png" type="Texture" id=6]
+[ext_resource path="res://cards/player_deck.tres" type="Resource" id=7]
+[ext_resource path="res://assets/ui/startbutton_press.png" type="Texture" id=8]
+[ext_resource path="res://assets/ui/startbutton_base.png" type="Texture" id=9]
+[ext_resource path="res://assets/ui/startbutton_hover.png" type="Texture" id=10]
+[ext_resource path="res://assets/ui/bidding_rect.png" type="Texture" id=11]
+[ext_resource path="res://assets/card/card_details_separator.png" type="Texture" id=12]
+
+[node name="BaseBiddingScene" type="Node2D"]
+script = ExtResource( 2 )
+player_deck = ExtResource( 7 )
+cards_layer = NodePath("Cards")
+deck_button = NodePath("CanvasLayer/DeckArea/Deck")
+discard_button = NodePath("CanvasLayer/DiscardArea/Discard")
+base_card_scene = ExtResource( 3 )
+bidding_amount = NodePath("CanvasLayer/BiddingArea/BiddingMargin/BiddingInfo/BiddingAmount")
+commission_amount = NodePath("CanvasLayer/BiddingArea/BiddingMargin/BiddingInfo/CommissionAmount")
+commission_goal = NodePath("CanvasLayer/BiddingArea/BiddingMargin/BiddingInfo/CommissionGoal")
+start_button = NodePath("CanvasLayer/StartGame")
+
+[node name="Background" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false
+
+[node name="Cards" type="YSort" parent="."]
+sort_enabled = false
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="DeckArea" type="MarginContainer" parent="CanvasLayer"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -195.0
+margin_right = 141.0
+custom_constants/margin_right = 0
+custom_constants/margin_top = -30
+custom_constants/margin_left = 30
+custom_constants/margin_bottom = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Deck" type="TextureButton" parent="CanvasLayer/DeckArea"]
+margin_left = 30.0
+margin_top = -30.0
+margin_right = 171.0
+margin_bottom = 195.0
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 4 )
+texture_hover = ExtResource( 6 )
+texture_disabled = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DiscardArea" type="MarginContainer" parent="CanvasLayer"]
+anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = -171.0
+margin_top = -195.0
+custom_constants/margin_right = 30
+custom_constants/margin_top = -30
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Cards" type="Control" parent="."]
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-margin_left = -200.0
-margin_top = -200.0
-margin_right = 200.0
+[node name="Discard" type="TextureButton" parent="CanvasLayer/DiscardArea"]
+self_modulate = Color( 0.501961, 0.501961, 0.501961, 1 )
+margin_top = -30.0
+margin_right = 141.0
+margin_bottom = 195.0
+rect_pivot_offset = Vector2( 90, 128 )
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 4 )
+texture_hover = ExtResource( 6 )
+texture_disabled = ExtResource( 5 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="StartGame" type="TextureButton" parent="CanvasLayer"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -120.0
+margin_top = -40.0
+margin_right = 120.0
+margin_bottom = 40.0
+hint_tooltip = "Start the bidding!"
+texture_normal = ExtResource( 9 )
+texture_pressed = ExtResource( 8 )
+texture_hover = ExtResource( 10 )
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BiddingArea" type="MarginContainer" parent="CanvasLayer"]
+margin_right = 40.0
+margin_bottom = 40.0
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BiddingBackground" type="NinePatchRect" parent="CanvasLayer/BiddingArea"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 231.0
+margin_bottom = 114.0
+texture = ExtResource( 11 )
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 12
+
+[node name="BiddingMargin" type="MarginContainer" parent="CanvasLayer/BiddingArea"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 231.0
+margin_bottom = 114.0
+custom_constants/margin_right = 10
+custom_constants/margin_top = 10
+custom_constants/margin_left = 10
+custom_constants/margin_bottom = 10
+
+[node name="BiddingInfo" type="VBoxContainer" parent="CanvasLayer/BiddingArea/BiddingMargin"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 211.0
+margin_bottom = 94.0
+
+[node name="GoalsTitle" type="Label" parent="CanvasLayer/BiddingArea/BiddingMargin/BiddingInfo"]
+margin_right = 201.0
+margin_bottom = 14.0
+text = "Auction Information"
+
+[node name="HBar" type="TextureRect" parent="CanvasLayer/BiddingArea/BiddingMargin/BiddingInfo"]
+margin_top = 18.0
+margin_right = 201.0
+margin_bottom = 22.0
+texture = ExtResource( 12 )
+stretch_mode = 1
+
+[node name="BiddingAmount" type="Label" parent="CanvasLayer/BiddingArea/BiddingMargin/BiddingInfo"]
+margin_top = 26.0
+margin_right = 201.0
+margin_bottom = 40.0
+text = "$50,000,000.00"
+
+[node name="HBar2" type="TextureRect" parent="CanvasLayer/BiddingArea/BiddingMargin/BiddingInfo"]
+margin_top = 44.0
+margin_right = 201.0
+margin_bottom = 48.0
+texture = ExtResource( 12 )
+stretch_mode = 1
+
+[node name="CommissionAmount" type="Label" parent="CanvasLayer/BiddingArea/BiddingMargin/BiddingInfo"]
+margin_top = 52.0
+margin_right = 201.0
+margin_bottom = 66.0
+text = "Current Commission: 1%"
+
+[node name="CommissionGoal" type="Label" parent="CanvasLayer/BiddingArea/BiddingMargin/BiddingInfo"]
+margin_top = 70.0
+margin_right = 201.0
+margin_bottom = 84.0
+text = "Goal Commission: $20,000,000"
+
+[connection signal="pressed" from="CanvasLayer/DeckArea/Deck" to="." method="_on_Deck_pressed"]
+[connection signal="pressed" from="CanvasLayer/DiscardArea/Discard" to="." method="_on_Discard_pressed"]
+[connection signal="pressed" from="CanvasLayer/StartGame" to="." method="_on_StartGame_pressed"]
