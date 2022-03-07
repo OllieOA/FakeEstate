@@ -10,3 +10,9 @@ signal card_focusing(card)
 signal card_returned(card)
 signal card_selected_for_play(card)
 signal card_unselected_for_play(card)
+
+signal enemy_row_repositioned
+signal enemy_drawn(enemy)
+signal enemy_focusing(enemy)
+signal enemy_focused(enemy)
+signal enemy_chosen_for_play(enemy)

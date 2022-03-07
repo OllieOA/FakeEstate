@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://assets/mockup.png" type="Texture" id=1]
 [ext_resource path="res://scenes/base_bidding_scene.gd" type="Script" id=2]
@@ -14,11 +14,15 @@
 [ext_resource path="res://assets/ui/end_turn_button_base.png" type="Texture" id=12]
 [ext_resource path="res://assets/ui/end_turn_button_press.png" type="Texture" id=13]
 [ext_resource path="res://assets/ui/end_turn_button_hover.png" type="Texture" id=14]
+[ext_resource path="res://scenes/enemies.gd" type="Script" id=15]
+[ext_resource path="res://enemies/enemy_deck.tres" type="Resource" id=16]
 
 [node name="BaseBiddingScene" type="Node2D"]
 script = ExtResource( 2 )
 player_deck = ExtResource( 7 )
+enemy_deck = ExtResource( 16 )
 cards_layer = NodePath("Cards")
+enemy_layer = NodePath("Enemies")
 deck_button = NodePath("CanvasLayer/DeckArea/Deck")
 discard_button = NodePath("CanvasLayer/DiscardArea/Discard")
 base_card_scene = ExtResource( 3 )
@@ -32,26 +36,29 @@ centered = false
 [node name="Cards" type="YSort" parent="."]
 sort_enabled = false
 
+[node name="Enemies" type="YSort" parent="."]
+script = ExtResource( 15 )
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="DeckArea" type="MarginContainer" parent="CanvasLayer"]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_top = -195.0
-margin_right = 141.0
-custom_constants/margin_right = 0
-custom_constants/margin_top = -30
-custom_constants/margin_left = 30
-custom_constants/margin_bottom = 0
+margin_top = -158.0
+margin_right = 161.0
+margin_bottom = 57.0
+rect_scale = Vector2( 0.7, 0.7 )
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Deck" type="TextureButton" parent="CanvasLayer/DeckArea"]
-margin_left = 30.0
-margin_top = -30.0
-margin_right = 171.0
-margin_bottom = 195.0
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 161.0
+margin_bottom = 215.0
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 4 )
 texture_hover = ExtResource( 6 )
@@ -65,11 +72,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -171.0
-margin_top = -195.0
-custom_constants/margin_right = 30
-custom_constants/margin_top = -30
-custom_constants/margin_left = 0
+margin_left = -120.0
+margin_top = -158.0
+margin_right = 51.0001
+margin_bottom = 57.0001
+rect_scale = Vector2( 0.7, 0.7 )
+custom_constants/margin_top = 20
+custom_constants/margin_left = 10
 custom_constants/margin_bottom = 0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -77,9 +86,10 @@ __meta__ = {
 
 [node name="Discard" type="TextureButton" parent="CanvasLayer/DiscardArea"]
 self_modulate = Color( 0.501961, 0.501961, 0.501961, 1 )
-margin_top = -30.0
-margin_right = 141.0
-margin_bottom = 195.0
+margin_left = 10.0
+margin_top = 20.0
+margin_right = 171.0
+margin_bottom = 215.0
 rect_pivot_offset = Vector2( 90, 128 )
 texture_normal = ExtResource( 4 )
 texture_pressed = ExtResource( 4 )

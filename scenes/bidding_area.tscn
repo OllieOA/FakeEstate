@@ -9,7 +9,7 @@
 [node name="BiddingArea" type="MarginContainer"]
 margin_right = 40.0
 margin_bottom = 40.0
-rect_min_size = Vector2( 364, 114 )
+rect_min_size = Vector2( 380, 114 )
 theme = ExtResource( 4 )
 custom_constants/margin_top = 10
 custom_constants/margin_left = 10

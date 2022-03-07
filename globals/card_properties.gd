@@ -58,7 +58,7 @@ const card_database = {
 		"class": Class.FORCE,
 		"level": 2,
 		"flavourtext": '"You HAVE to put money down here!"',
-		"effect_1_method": ["force_bid"],
+		"effect_1_method": ["force_bid", []],
 		"effect_1_icon": preload("res://assets/ui/icon_force.png"),
 		"effect_1_text": "Bid",
 		"effect_2_method": null,
@@ -69,17 +69,15 @@ const card_database = {
 		"name": "SKIP",
 		"class": Class.FORCE,
 		"level": 2,
-		"flavourtext": '"Just let the other`s fight it out this time."',
-		"effect_1_method": ["force_bid"],
+		"flavourtext": '"Just let the others fight it out this time."',
+		"effect_1_method": ["force_bid", []],
 		"effect_1_icon": preload("res://assets/ui/icon_nerve.png"),
 		"effect_1_text": "Skip",
 		"effect_2_method": ["change_attribute", [EnemyProperties.Attribute.FATIGUE, -10.0]],
 		"effect_2_icon": preload("res://assets/ui/icon_fatigue.png"),
-		"effect_2_text": null
+		"effect_2_text": "-10"
 	},
 }
-
-
 
 
 const class_icons = {
@@ -101,7 +99,7 @@ const level_colours = {
 const class_colours = {
 	Class.ATTRIBUTE: Color("3c62bc"),  # Blue
 	Class.FORCE: Color("51bc3c"),  # Green
-	Class.BUFF: Color("fa2525"),  # Red
+	Class.BUFF: Color("d8cf0c"),  # Yellow
 	Class.WASTE: Color("676767")  # Grey
 }
 

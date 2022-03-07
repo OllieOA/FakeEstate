@@ -2,7 +2,7 @@ extends Resource
 class_name EnemyProperties
 
 enum Attribute {NERVE, AGGRO, FATIGUE}
-enum State {BIDDING, BID, BUST, WAITING}  # MOVE THIS TO BASE ENEMY
+
 enum Type {
 	TIMEBOMB,
 	FIRST_TIMERS,
@@ -102,40 +102,64 @@ var possible_last_names = [
 	"Mills"
 ]
 
-#var type_data = {
-#	TIMEBOMB: {
-#
-#	}
-#	FIRST_TIMERS: {
-#
-#	}
-#	CUCUMBER: {
-#
-#	}
-#	FALSE_CONFIDENCE: {
-#
-#	}
-#	TRUST_FUND: {
-#
-#	}
-#	BULL: {
-#
-#	}
-#	MILLENIAL: {
-#
-#	}
-#	CAFFEINATED: {
-#
-#	}
-#	SAVVY_SHOPPER: {
-#
-#	}
-#	HAPPY_TO_BE_HERE: {
-#
-#	}
-#}
+# Values are in [aggro, nerves, fatigue]
+
+const enemy_database = {
+	Type.TIMEBOMB: {
+		"difficulty": 2,
+		"class": "TIMEBOMB",
+		"flavourtext": "High nerves and high aggression. Here for a quick auction.",
+		"starting_values": [20, 20, 0],
+		"increase_rates": [12, 12, 8],
+		"colour": Color("f78312")
+	},
+	Type.FIRST_TIMERS: {
+		"difficulty": 3,
+		"class": "FIRST TIMERS",
+		"flavourtext": "High nerves and low aggression. Likely to get scared and fold early.",
+		"starting_values": [5, 20, 0],
+		"increase_rates": [5, 12, 8],
+		"colour": Color("08b7bb")
+	},
+	Type.CUCUMBER: {
+		"difficulty": 1,
+		"class": "CUCUMBER",
+		"flavourtext": "Low nerves and low aggression. Bidding small but consistently.",
+		"starting_values": [5, 5, 0],
+		"increase_rates": [5, 5, 8],
+		"colour": Color("09700d")
+	},
+	Type.FALSE_CONFIDENCE: {
+		
+	},
+	Type.TRUST_FUND: {
+		
+	},
+	Type.BULL: {
+		
+	},
+	Type.MILLENIAL: {
+		
+	},
+	Type.CAFFEINATED: {
+		
+	},
+	Type.SAVVY_SHOPPER: {
+		
+	},
+	Type.HAPPY_TO_BE_HERE: {
+		
+	}
+}
 
 # Methods that cards can call
+
+const method_text_lookup = {
+	"change_attribute": "Changing %s by %s",
+	"skip_bid": "Skipping bid",
+	"force_bid": "Forcing a bid"
+}
+
 
 func change_attribute(attribute: int, amount: float) -> void:
 	pass

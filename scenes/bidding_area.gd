@@ -10,11 +10,11 @@ export (NodePath) onready var commission_amount = get_node(commission_amount) as
 export (NodePath) onready var commission_goal = get_node(commission_goal) as Label
 
 export var initial_amount := 100.0
-var goal_commission_amount := 40000
+var goal_commission_amount := 4000
 var current_bid := 0.0
 var target_bid := 0.0
-var current_commission_percentage := 0.1
-var target_commission_percentage := 0.1
+var current_commission_percentage := 0.0
+var target_commission_percentage := 1
 var current_commission := 0.0
 var target_commission := 0.0
 
@@ -35,7 +35,6 @@ func _construct_panel() -> void:
 	
 	commission_goal.set_text("Goal Commission: " + _convert_currency(goal_commission_amount))
 	commission_amount.add_color_override("font_color", Color("e01212"))
-	
 
 
 func _process(delta: float) -> void:
@@ -92,7 +91,7 @@ func decrease_commission_percentage(amount):
 	
 	
 func _update_commission_text():
-	target_commission = target_bid * target_commission_percentage
+	target_commission = target_bid * target_commission_percentage / 100
 	current_commission = lerp(current_commission, target_commission, panel_update_rate)
 	current_commission_percentage = lerp(current_commission_percentage, target_commission_percentage, panel_update_rate)
 	

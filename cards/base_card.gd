@@ -42,7 +42,7 @@ var min_card_height = 252
 var state = State.SENDING_TO_HAND
 
 # Card positioning
-var FOCUS_POSITION = Vector2(0.5, 0.5)  # Relative to viewport
+var FOCUS_POSITION = Vector2(0.3, 0.5)  # Relative to viewport
 
 var target_position = Vector2.ZERO
 var target_rotation = 90
@@ -61,6 +61,8 @@ var scale_close_enough := false
 var hand_position := Vector2.ZERO
 var hand_rotation := 0
 var hand_scale := Vector2(1.0, 1.0)
+
+var lerp_factor := 0.2
 
 var mouseover_enabled := true
 
@@ -98,7 +100,7 @@ func _construct_card() -> void:
 		var effect_2_font_size = _resize_label(effect_2_text)
 	
 	# Set icons
-	class_icon.texture = card_properties.class_icons[card_type]
+	class_icon.texture = card_properties.class_icons[card_attributes["class"]]
 	effect_1_icon.texture = card_attributes["effect_1_icon"]
 	
 	if card_attributes["effect_2_icon"] != null:
@@ -140,9 +142,9 @@ func _check_text_violations(label: Label) -> bool:
 
 func _process(delta: float) -> void:
 	# Figure out positioning
-	rect_position = lerp(rect_position, target_position, 0.2)
-	rect_rotation = rad2deg(lerp_angle(deg2rad(rect_rotation), deg2rad(target_rotation), 0.2))
-	rect_scale = lerp(rect_scale, target_scale, 0.2)
+	rect_position = lerp(rect_position, target_position, lerp_factor)
+	rect_rotation = rad2deg(lerp_angle(deg2rad(rect_rotation), deg2rad(target_rotation), lerp_factor))
+	rect_scale = lerp(rect_scale, target_scale, lerp_factor)
 	
 	position_diff_x = abs(rect_position.x - target_position.x)
 	position_diff_y = abs(rect_position.y - target_position.y)
@@ -150,8 +152,8 @@ func _process(delta: float) -> void:
 	scale_diff_x = abs(rect_scale.x - target_scale.x)
 	scale_diff_y = abs(rect_scale.y - target_scale.y)
 	
-	position_close_enough = position_diff_x < 5 and position_diff_y < 5
-	rotation_close_enough = abs(rect_rotation - target_rotation) < 5
+	position_close_enough = position_diff_x < 1 and position_diff_y < 1
+	rotation_close_enough = abs(rect_rotation - target_rotation) < 1
 	scale_close_enough = scale_diff_x < 0.1 and scale_diff_y < 0.1
 	
 	match state:
@@ -170,19 +172,12 @@ func _process(delta: float) -> void:
 			SignalBus.emit_signal("card_selected_for_play", self)
 			state = State.DIRECTING
 		State.DIRECTING:  # Selected for play
-			if Input.is_action_pressed(GameControl.secondary_action):
-				focus_button.pressed = false
-				_unfocus()
-				SignalBus.emit_signal("card_unselected_for_play", self)
+			pass
 		State.FOCUSING:
-			if Input.is_action_pressed(GameControl.secondary_action):
-				_unfocus()
 			if position_close_enough and rotation_close_enough and scale_close_enough:
 				state = State.FOCUSED
 				SignalBus.emit_signal("card_focused", self)
 		State.FOCUSED:
-			if Input.is_action_pressed(GameControl.secondary_action):
-				_unfocus()
 			if focus_button.disabled:
 				focus_button.disabled = false
 		State.DISABLED:
@@ -212,8 +207,8 @@ func _on_Focus_mouse_exited() -> void:
 
 
 func _check_focus(card):
-	if card != self and (state == State.FOCUSED or state == State.FOCUSING):
-		_unfocus()
+	if card != self:
+		_return_card_in_states()
 
 
 func _focus():
@@ -231,3 +226,45 @@ func _unfocus():
 	focus_button.disabled = true
 	state = State.SENDING_TO_HAND
 
+
+
+func _on_BaseCard_gui_input(event: InputEvent) -> void:
+	if event.is_action_pressed(GameControl.primary_action):
+		match state:
+			State.HAND:
+				_focus()
+	elif event.is_action_pressed(GameControl.secondary_action):
+		_return_card_in_states()
+
+
+func _return_card_in_states():
+	match state:
+			State.FOCUSED, State.FOCUSING:
+				_unfocus()
+			State.DIRECTING:
+				focus_button.pressed = false
+				SignalBus.emit_signal("card_unselected_for_play", self)
+				_unfocus()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed(GameControl.secondary_action):
+		match state:
+			State.DIRECTING:
+				focus_button.pressed = false
+				_unfocus()
+				SignalBus.emit_signal("card_unselected_for_play", self)
+			State.FOCUSED, State.FOCUSING:
+				_unfocus()
+
+
+# =-------------=
+# Play Management
+# =-------------=
+
+func get_effects() -> Array:
+	var effects = []  # [method_name, [binds]]
+	effects.append(card_attributes["effect_1_method"])
+	if card_attributes["effect_2_method"] != null:
+		effects.append(card_attributes["effect_2_method"])
+	return effects

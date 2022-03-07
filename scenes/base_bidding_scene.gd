@@ -2,8 +2,11 @@ extends Node2D
 
 
 export (Resource) onready var player_deck = player_deck as PlayerDeck
+export (Resource) onready var enemy_deck = enemy_deck as EnemyDeck
 
 export (NodePath) onready var cards_layer = get_node(cards_layer) as YSort
+export (NodePath) onready var enemy_layer = get_node(enemy_layer) as YSort
+
 export (NodePath) onready var deck_button = get_node(deck_button) as TextureButton
 export (NodePath) onready var discard_button = get_node(discard_button) as TextureButton
 export (PackedScene) var base_card_scene
@@ -11,14 +14,27 @@ export (PackedScene) var base_card_scene
 export (NodePath) onready var bidding_panel = get_node(bidding_panel) as BiddingPanel
 
 # Play area
-onready var card_oval_centre = get_viewport().size * Vector2(0.5, 1.3)
-onready var card_oval_h_radius = get_viewport().size.x * 0.45
-onready var card_oval_v_radius = get_viewport().size.y * 0.4
+# - Cards
+onready var card_oval_centre = get_viewport_rect().size * Vector2(0.5, 1.3)
+onready var card_oval_h_radius = get_viewport_rect().size.x * 0.45
+onready var card_oval_v_radius = get_viewport_rect().size.y * 0.4
 var max_angle = 135
 var min_angle = 45
 var player_hand_instances = []
 var is_card_selected := false
-var card_selected
+var card_selected  # : BaseCard
+
+# - Enemies
+export var num_enemies := 4
+var enemy_instances = []
+
+onready var enemies_centre = get_viewport_rect().size * Vector2(0.88, 0.5)
+var max_height_enemy = 0.78
+var min_height_enemy = 0.28
+
+var enemy_row_scale = Vector2(0.8, 0.8)
+
+var height_spacing = (max_height_enemy - min_height_enemy) / num_enemies
 
 # Functional
 export (NodePath) onready var start_button = get_node(start_button)
@@ -37,6 +53,9 @@ func _ready() -> void:
 	SignalBus.connect("card_selected_for_play", self, "_handle_card_selected_for_play")
 	SignalBus.connect("card_unselected_for_play", self, "_handle_card_unselected_for_play")
 	
+	SignalBus.connect("enemy_drawn", self, "_handle_drawn_enemy")
+	SignalBus.connect("enemy_chosen_for_play", self, "_handle_played_enemy")
+	
 	_show_start()
 	
 	
@@ -46,6 +65,10 @@ func _show_start() -> void:
 
 func _start_game() -> void:
 	_create_deck()
+	_create_enemies(num_enemies)
+	
+	
+	# TESTING
 	bidding_panel.show_auction_panel()
 	yield(get_tree().create_timer(2.0), "timeout")
 	bidding_panel.set_bid(100000)
@@ -54,7 +77,7 @@ func _start_game() -> void:
 	bidding_panel.increase_bid(50000)
 	
 	yield(get_tree().create_timer(2.0), "timeout")
-	bidding_panel.increase_commission_percentage(0.2)
+	bidding_panel.increase_commission_percentage(2)
 
 
 # ------------
@@ -147,6 +170,9 @@ func _handle_card_selected_for_play(selected_card):
 	is_card_selected = true
 	card_selected = selected_card
 	
+	for enemy in enemy_instances:
+		enemy.selectable = true
+	
 
 func _handle_card_unselected_for_play(unselected_card):
 	for card in cards_layer.get_children():
@@ -154,6 +180,63 @@ func _handle_card_unselected_for_play(unselected_card):
 			card.mouseover_enabled = true
 	is_card_selected = false
 	card_selected = null
+	
+	for enemy in enemy_instances:
+		enemy.selectable = false
+
+
+func _play_card(effects: Array, target) -> void:
+	if target.has_method("handle_effects"):
+		target.handle_effects(effects)
+
+
+# =-----------=
+# Enemy methods
+# =-----------=
+
+func _create_enemies(num: int):
+	enemy_deck.initialize(num)
+
+
+func _handle_drawn_enemy(enemy: BaseEnemy):
+	enemy_instances.append(enemy)
+	enemy_layer.add_child(enemy)
+	enemy.rect_position = Vector2(get_viewport_rect().size.x, 0.0)
+	_reposition_enemies()
+
+
+func _reposition_enemies() -> void:
+	var new_positions = _calculate_new_positions_enemies()
+	
+	for i in range(len(enemy_instances)):
+		var curr_enemy = enemy_instances[i]
+		var curr_enemy_position = new_positions[i] - curr_enemy.rect_pivot_offset
+		
+		curr_enemy.target_position = curr_enemy_position
+		curr_enemy.target_scale = enemy_row_scale
+		
+		curr_enemy.row_position = curr_enemy_position
+		curr_enemy.row_scale = enemy_row_scale
+		
+		yield(get_tree().create_timer(0.01), "timeout")
+	
+	SignalBus.emit_signal("enemy_row_repositioned")
+
+
+func _calculate_new_positions_enemies() -> Array:
+	var positions = []
+	
+	for i in range(len(enemy_instances)):
+		var x_pos = enemies_centre.x + 10 * i
+		var y_pos = get_viewport_rect().size.y * (min_height_enemy + i*height_spacing)
+		positions.append(Vector2(x_pos, y_pos))
+	
+	return positions
+
+
+func _handle_played_enemy(enemy: BaseEnemy) -> void:
+	var effects: Array = card_selected.get_effects()
+	_play_card(effects, enemy)
 
 
 # =------------=
